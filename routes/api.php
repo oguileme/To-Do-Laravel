@@ -8,9 +8,13 @@ Route::middleware('auth:api')->group(function () {
     Route::resource('projetos', \App\Http\Controllers\ProjetoController::class);
     Route::resource('tarefas', \App\Http\Controllers\TarefaController::class);
     Route::get('profile', [\App\Http\Controllers\AuthController::class, 'profile']);
+    Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
 });
 
 
 Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register']);
 Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
+
+
+Route::resource('users', \App\Http\Controllers\UserController::class);
 

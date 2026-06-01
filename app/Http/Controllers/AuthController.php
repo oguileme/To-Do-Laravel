@@ -15,13 +15,16 @@ class AuthController extends Controller
         // Lógica para registrar um novo usuário
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|string|email',
             'password' => 'required|string|min:8|confirmed',
         ]);
+        try {
+            $user = User::create($data);
 
-        $user = User::create($data);
-
-        return response()->json(['user' => $user], 201);
+            return response()->json(['user' => $user], 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function login(Request $request)
@@ -37,11 +40,11 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        // Retorna o token para o cliente. TROCAR ISSO DEPOIS PELO AMOR DE DEUS
-        return response()->json(['token' => $token]);
+        
+        return response()->json(['mensagem' => 'Login successful'])->header('Authorization', $token);
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
         // Lógica para invalidar o token do usuário
         Auth::guard('api')->logout();
